@@ -1,16 +1,68 @@
-# React + Vite
+# 💻 PC Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto consiste numa aplicação web desenvolvida em React que permite aos utilizadores criar configurações de computadores (builds) personalizadas com base no orçamento e tipo de utilização (gaming ou escritório).
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Funcionalidades
 
-## React Compiler
+- 🔐 Sistema de login e criação de conta
+- 💰 Inserção de orçamento
+- 🎮 Escolha do tipo de build (Gaming / Escritório)
+- ⚙️ Geração automática de builds
+- 📊 Visualização das peças e preço total
+- 💾 Guardar builds no perfil do utilizador
+- 🗑️ Apagar builds guardadas
+- 🧩 Visualização de componentes disponíveis
+- 🔗 Links para compra de componentes
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🧠 Estrutura da Base de Dados (3FN)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+O sistema segue a Terceira Forma Normal (3FN), garantindo:
+- ausência de redundância
+- organização eficiente dos dados
+- integridade entre entidades
+
+### Entidades principais:
+- Utilizador
+- Build
+- Componente
+- Categoria
+- Build_Componente
+
+---
+
+## 📊 Diagrama Entidade-Relação
+
+O sistema inclui um diagrama ER com:
+- chaves primárias (PK)
+- chaves estrangeiras (FK)
+- relações 1:N e N:N
+
+---
+
+## ⚙️ Tecnologias Utilizadas
+
+- ⚛️ React
+- ⚡ Vite
+- 💾 LocalStorage (persistência de dados)
+- 🌐 HTML, CSS, JavaScript
+
+---
+
+## 📦 Instalação
+
+```bash
+# Clonar o projeto
+git clone <url-do-repositorio>
+
+# Entrar na pasta
+cd pc-builder
+
+# Instalar dependências
+npm install
+
+# Iniciar o servidor
+npm run dev
