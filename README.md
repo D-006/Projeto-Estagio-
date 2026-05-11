@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # 💻 PC Builder
 
 Este projeto consiste numa aplicação web desenvolvida em React que permite aos utilizadores criar configurações de computadores (builds) personalizadas com base no orçamento e tipo de utilização (gaming ou escritório).
@@ -22,30 +20,6 @@ Este projeto consiste numa aplicação web desenvolvida em React que permite aos
 
 ## 🧠 Estrutura da Base de Dados (3FN)
 
-=======
-# 💻 PC Builder
-
-Este projeto consiste numa aplicação web desenvolvida em React que permite aos utilizadores criar configurações de computadores (builds) personalizadas com base no orçamento e tipo de utilização (gaming ou escritório).
-
----
-
-## 🚀 Funcionalidades
-
-- 🔐 Sistema de login e criação de conta
-- 💰 Inserção de orçamento
-- 🎮 Escolha do tipo de build (Gaming / Escritório)
-- ⚙️ Geração automática de builds
-- 📊 Visualização das peças e preço total
-- 💾 Guardar builds no perfil do utilizador
-- 🗑️ Apagar builds guardadas
-- 🧩 Visualização de componentes disponíveis
-- 🔗 Links para compra de componentes
-
----
-
-## 🧠 Estrutura da Base de Dados (3FN)
-
->>>>>>> 4d2242bf6ec55d0f2de28994f6e49905f7040235
 O sistema segue a Terceira Forma Normal (3FN), garantindo:
 - ausência de redundância
 - organização eficiente dos dados
@@ -91,8 +65,4 @@ cd pc-builder
 npm install
 
 # Iniciar o servidor
-<<<<<<< HEAD
 npm run dev
-=======
-npm run dev
->>>>>>> 4d2242bf6ec55d0f2de28994f6e49905f7040235

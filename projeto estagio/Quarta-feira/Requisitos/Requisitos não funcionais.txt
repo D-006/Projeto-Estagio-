@@ -1,0 +1,62 @@
+Requisitos não funcionais:
+1. Desempenho
+O sistema deve apresentar tempos de resposta rápidos e eficientes.
+A geração de uma build deve ocorrer em menos de 2 segundos.
+O carregamento das páginas deve ser imediato ou inferior a 3 segundos.
+
+2. Segurança
+O sistema deve garantir a proteção dos dados dos utilizadores.
+As credenciais dos utilizadores não devem ser armazenadas em texto simples (em versões futuras devem ser encriptadas).
+O acesso às builds deve ser restrito ao utilizador autenticado.
+O sistema deve evitar acessos não autorizados.
+
+3. Usabilidade
+O sistema deve ser intuitivo e fácil de utilizar.
+A interface deve ser simples e organizada.
+As funcionalidades principais devem estar facilmente acessíveis.
+O utilizador deve conseguir navegar sem dificuldades.
+
+4. Disponibilidade
+O sistema deve estar disponível para utilização sempre que necessário.
+O sistema deve estar acessível durante a maior parte do tempo.
+Deve minimizar falhas e interrupções.
+
+5. Escalabilidade
+O sistema deve permitir crescimento futuro.
+Deve suportar aumento de utilizadores.
+Deve permitir a adição de novos componentes e funcionalidades sem grandes alterações.
+
+6. Manutenibilidade
+O sistema deve ser fácil de manter e atualizar.
+O código deve estar organizado e documentado.
+Deve permitir modificações sem comprometer outras partes do sistema.
+
+7. Persistência de Dados
+O sistema deve garantir o armazenamento correto dos dados.
+As builds devem ser guardadas corretamente.
+Os dados devem permanecer disponíveis após reiniciar a aplicação.
+
+8. Compatibilidade
+O sistema deve funcionar em diferentes ambientes.
+Compatível com os principais navegadores (Chrome, Edge, etc.).
+Deve adaptar-se a diferentes tamanhos de ecrã (responsivo).
+
+9. Confiabilidade
+O sistema deve funcionar de forma estável e consistente.
+Deve evitar erros críticos durante a utilização.
+Deve validar corretamente os dados introduzidos.
+
+10. Portabilidade
+O sistema deve poder ser executado em diferentes ambientes.
+Deve funcionar em diferentes sistemas operativos (Windows, Linux, etc.).
+Deve poder ser facilmente transferido e executado noutros dispositivos.
+
+11. Eficiência
+O sistema deve utilizar os recursos de forma otimizada.
+Deve evitar consumo excessivo de memória.
+Deve manter bom desempenho mesmo com várias builds.
+
+12. Integridade dos Dados
+O sistema deve garantir consistência dos dados.
+Não devem existir dados duplicados ou inconsistentes.
+As relações entre entidades devem ser respeitadas.

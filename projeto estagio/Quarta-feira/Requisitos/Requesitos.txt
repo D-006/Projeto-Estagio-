@@ -1,0 +1,4 @@
+Requesitos:
+:FazerLogin/Criar conta, poder comparar componentes, 
+analisar e comparar preços das peças de PC, obter recomendações 
+das melhores peças de acordo com a build que o utilizador escolheu, poder ver peças separadamente e ter o link de onde as pode comprar.
