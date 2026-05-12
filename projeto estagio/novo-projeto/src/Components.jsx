@@ -72,7 +72,9 @@ export default function Components() {
 
   const filteredData = data.filter(comp => {
     const search = searchTerm.toLowerCase();
-    const matchesSearch = comp.name.toLowerCase().includes(search) || (comp.description?.toLowerCase().includes(search));
+    const matchesSearch = comp.name.toLowerCase().includes(search)
+      || comp.description?.toLowerCase().includes(search)
+      || comp.specs?.toLowerCase().includes(search);
     const matchesType = filterType === 'all' || comp.type === filterType;
     return matchesSearch && matchesType;
   });
@@ -130,7 +132,9 @@ export default function Components() {
                       <div className="component-card-header">
                         <div>
                           <h3>{c.name}</h3>
-                          <p className="component-subtitle">{typeLabels[c.type]}</p>
+                          <p className="component-subtitle">
+                            {c.manufacturer ? `${c.manufacturer} • ` : ''}{c.specs}
+                          </p>
                         </div>
                         <button
                           className={`favorite-btn${isFavorite ? ' active' : ''}`}
@@ -140,7 +144,11 @@ export default function Components() {
                           {isFavorite ? '★' : '☆'}
                         </button>
                       </div>
-                      <p>{c.description}</p>
+                      <div className="component-meta">
+                        {c.tdp && <span>Consumo: {c.tdp}</span>}
+                        {c.warranty && <span>Garantia: {c.warranty}</span>}
+                        {c.rating && <span className="component-rating">{'★'.repeat(Math.round(c.rating))}{'☆'.repeat(5 - Math.round(c.rating))}</span>}
+                      </div>
                       <p className="component-price">{c.price}€</p>
                       {c.linkCompra ? (
                         <a href={c.linkCompra} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}>
@@ -163,7 +171,9 @@ export default function Components() {
               <h3>{selected.name}</h3>
               <button className="close-btn" onClick={() => setSelected(null)}>×</button>
             </div>
-            <p className="card-copy">{selected.description}</p>
+            {selected.description || selected.specs ? (
+              <p className="card-copy">{selected.description || selected.specs}</p>
+            ) : null}
             <div className="modal-row">
               <div>
                 <strong>Categoria:</strong> {typeLabels[selected.type]}
@@ -172,6 +182,20 @@ export default function Components() {
                 <strong>Preço:</strong> {selected.price}€
               </div>
             </div>
+            <div className="modal-row">
+              {selected.manufacturer && (
+                <div><strong>Fabricante:</strong> {selected.manufacturer}</div>
+              )}
+              {selected.tdp && (
+                <div><strong>Consumo:</strong> {selected.tdp}</div>
+              )}
+              {selected.warranty && (
+                <div><strong>Garantia:</strong> {selected.warranty}</div>
+              )}
+            </div>
+            {selected.rating && (
+              <p className="component-rating">Avaliação: {'★'.repeat(Math.round(selected.rating))}{'☆'.repeat(5 - Math.round(selected.rating))} ({selected.rating.toFixed(1)})</p>
+            )}
             {selected.specs && (
               <div className="modal-specs">
                 <strong>Especificações:</strong>
