@@ -19,11 +19,15 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 // Signup route
 router.post('/signup', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
 
     // Validate input
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email e senha são necessários.' });
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'Nome de usuário, email e senha são necessários.' });
+    }
+
+    if (!name.trim()) {
+      return res.status(400).json({ message: 'Nome de usuário não pode ficar vazio.' });
     }
 
     if (password.length < 6) {
@@ -44,7 +48,7 @@ router.post('/signup', async (req, res) => {
       id: users.length + 1,
       email,
       password: hashedPassword,
-      name: email.split('@')[0]
+      name: name.trim()
     };
 
     users.push(newUser);
@@ -82,7 +86,7 @@ router.post('/login', async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: user.id, email: user.email },
+      { userId: user.id, email: user.email, name: user.name },
       JWT_SECRET,
       { expiresIn: '24h' }
     );
@@ -133,6 +137,17 @@ router.get('/profile', authenticateToken, (req, res) => {
       name: user.name
     }
   });
+});
+
+// Delete account route
+router.delete('/delete-account', authenticateToken, (req, res) => {
+  const userIndex = users.findIndex(u => u.id === req.user.userId);
+  if (userIndex === -1) {
+    return res.status(404).json({ error: 'Utilizador não encontrado.' });
+  }
+
+  users.splice(userIndex, 1);
+  return res.json({ message: 'Conta apagada com sucesso.' });
 });
 
 module.exports = router;

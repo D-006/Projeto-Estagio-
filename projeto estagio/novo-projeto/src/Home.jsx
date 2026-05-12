@@ -12,7 +12,7 @@ export default function Home() {
         <p className="card-copy">
           Planeje e monte o seu computador com recomendações de hardware, componentes atualizados e uma experiência de uso simples.
         </p>
-        {user && <p className="card-copy">Olá, <strong>{user.email}</strong>. Continue criando builds ou veja seu perfil.</p>}
+        {user && <p className="card-copy">Olá, <strong>{user.name || user.email.split('@')[0]}</strong>. Continue criando builds ou veja seu perfil.</p>}
       </section>
 
       <div className="home-cards">

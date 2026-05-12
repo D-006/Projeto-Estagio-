@@ -8,7 +8,7 @@ export function decodeJwt(token) {
     const padded = payload.padEnd(payload.length + (4 - (payload.length % 4)) % 4, '=');
     const decoded = atob(padded.replace(/-/g, '+').replace(/_/g, '/'));
     return JSON.parse(decoded);
-  } catch (error) {
+  } catch {
     return null;
   }
 }

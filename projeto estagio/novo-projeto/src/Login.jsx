@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Login() {
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const success = location.state?.success || '';
   const navigate = useNavigate();
 
   const login = async () => {
@@ -49,6 +51,7 @@ export default function Login() {
       </button>
 
       {error && <p className="error-text">{error}</p>}
+      {success && <p className="success-text">{success}</p>}
     </div>
   );
 }

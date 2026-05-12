@@ -32,7 +32,7 @@ export default function Components() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState(() => loadFavorites());
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -57,7 +57,6 @@ export default function Components() {
     };
 
     load();
-    setFavorites(loadFavorites());
 
     return () => {
       isMounted = false;

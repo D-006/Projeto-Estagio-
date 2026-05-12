@@ -1,8 +1,14 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { getCurrentUser } from './auth.js';
 
 export default function Profile() {
+  const navigate = useNavigate();
   const user = getCurrentUser();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState('');
 
   if (!user) {
     return (
@@ -14,17 +20,51 @@ export default function Profile() {
     );
   }
 
+  const token = localStorage.getItem('token');
+
+  const deleteAccount = async () => {
+    if (!window.confirm('Tem certeza que deseja apagar sua conta? Esta ação não pode ser desfeita.')) {
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      await axios.delete('http://localhost:5000/api/auth/delete-account', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      localStorage.removeItem('token');
+      localStorage.removeItem(`savedBuilds_${user.email}`);
+      setSuccess('Conta apagada com sucesso.');
+      setTimeout(() => navigate('/signup'), 1200);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Falha ao apagar a conta. Tente novamente.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="page-card">
       <h2>Meu Perfil</h2>
       <div className="profile-info">
-        <p><strong>Usuário:</strong> {user.email}</p>
+        <p><strong>Nome:</strong> {user.name || user.email.split('@')[0]}</p>
+        <p><strong>Email:</strong> {user.email}</p>
         <p><strong>ID:</strong> {user.id}</p>
         <p className="card-copy">Aqui você pode acessar as suas builds salvas, gerenciar favoritos e sair quando quiser.</p>
       </div>
+      {error && <p className="error-text">{error}</p>}
+      {success && <p className="success-text">{success}</p>}
       <div className="auth-actions">
         <Link to="/saved-builds" className="nav-link">Minhas Builds</Link>
         <Link to="/components" className="nav-link">Componentes</Link>
+        <button className="secondary" onClick={deleteAccount} disabled={loading}>
+          {loading ? 'Apagando...' : 'Apagar Conta'}
+        </button>
       </div>
     </div>
   );
