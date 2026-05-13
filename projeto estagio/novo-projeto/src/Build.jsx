@@ -37,6 +37,10 @@ export default function Build() {
       setError('Por favor, insira um orçamento válido.');
       return;
     }
+    if (budgetNum < 100) {
+      setError('O orçamento mínimo é 100€.');
+      return;
+    }
 
     setLoading(true);
     setError('');
@@ -97,6 +101,9 @@ export default function Build() {
         value={budget}
         onChange={e => setBudget(e.target.value)}
       />
+      <p className="card-copy" style={{ marginTop: '8px', color: '#cbd5e1' }}>
+        Orçamento mínimo: 100€
+      </p>
 
       <select className="form-control" value={type} onChange={e => setType(e.target.value)}>
         <option value="gaming">Gaming</option>
