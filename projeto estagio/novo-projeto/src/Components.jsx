@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const typeLabels = {
   all: 'Todos',
+  favorite: 'Favoritos',
   cpu: 'CPU',
   gpu: 'GPU',
   ram: 'RAM',
@@ -32,6 +33,7 @@ export default function Components() {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
+  const [priceFilter, setPriceFilter] = useState('all');
   const [favorites, setFavorites] = useState(() => loadFavorites());
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -72,18 +74,28 @@ export default function Components() {
 
   const filteredData = data.filter(comp => {
     const search = searchTerm.toLowerCase();
+    const key = comp._id ?? comp.id ?? comp.name;
     const matchesSearch = comp.name.toLowerCase().includes(search)
       || comp.description?.toLowerCase().includes(search)
       || comp.specs?.toLowerCase().includes(search);
-    const matchesType = filterType === 'all' || comp.type === filterType;
-    return matchesSearch && matchesType;
+    const matchesFavorites = filterType !== 'favorite' || favorites.includes(key);
+    const matchesType = filterType === 'all' || filterType === 'favorite' || comp.type === filterType;
+    const price = Number(comp.price ?? 0);
+    const matchesPrice = priceFilter === 'all'
+      || (priceFilter === 'under100' && price <= 100)
+      || (priceFilter === '100-300' && price > 100 && price <= 300)
+      || (priceFilter === '300-600' && price > 300 && price <= 600)
+      || (priceFilter === 'over600' && price > 600);
+    return matchesSearch && matchesFavorites && matchesType && matchesPrice;
   });
 
-  const groupedData = typeOrder.reduce((acc, type) => {
-    const items = filteredData.filter(comp => comp.type === type);
-    if (items.length > 0) acc[type] = items;
-    return acc;
-  }, {});
+  const groupedData = filterType === 'favorite'
+    ? { favorite: filteredData }
+    : typeOrder.reduce((acc, type) => {
+      const items = filteredData.filter(comp => comp.type === type);
+      if (items.length > 0) acc[type] = items;
+      return acc;
+    }, {});
 
   return (
     <div className="page-card">
@@ -105,6 +117,17 @@ export default function Components() {
           {Object.entries(typeLabels).map(([value, label]) => (
             <option key={value} value={value}>{label}</option>
           ))}
+        </select>
+        <select
+          className="form-control filter-select"
+          value={priceFilter}
+          onChange={e => setPriceFilter(e.target.value)}
+        >
+          <option value="all">Todos os preços</option>
+          <option value="under100">Até 100€</option>
+          <option value="100-300">100€ - 300€</option>
+          <option value="300-600">300€ - 600€</option>
+          <option value="over600">Mais de 600€</option>
         </select>
       </div>
 
@@ -146,7 +169,7 @@ export default function Components() {
                       </div>
                       <div className="component-meta">
                         {c.tdp && <span>Consumo: {c.tdp}</span>}
-                        {c.warranty && <span>Garantia: {c.warranty}</span>}
+                        {c.rating && <span>Avaliação: {c.rating.toFixed(1)} / 5</span>}
                         {c.rating && <span className="component-rating">{'★'.repeat(Math.round(c.rating))}{'☆'.repeat(5 - Math.round(c.rating))}</span>}
                       </div>
                       <p className="component-price">{c.price}€</p>
@@ -189,8 +212,8 @@ export default function Components() {
               {selected.tdp && (
                 <div><strong>Consumo:</strong> {selected.tdp}</div>
               )}
-              {selected.warranty && (
-                <div><strong>Garantia:</strong> {selected.warranty}</div>
+              {selected.rating && (
+                <div><strong>Avaliação:</strong> {selected.rating.toFixed(1)} / 5</div>
               )}
             </div>
             {selected.rating && (

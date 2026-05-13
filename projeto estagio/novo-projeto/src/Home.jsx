@@ -8,11 +8,10 @@ export default function Home() {
   return (
     <div className="home-grid">
       <section className="page-card">
-        <h2>Bem-vindo ao PC Builder</h2>
+        <h2>PC Builder</h2>
         <p className="card-copy">
           Planeje e monte o seu computador com recomendações de hardware, componentes atualizados e uma experiência de uso simples.
         </p>
-        {user && <p className="card-copy">Olá, <strong>{user.name || user.email.split('@')[0]}</strong>. Continue criando builds ou veja seu perfil.</p>}
       </section>
 
       <div className="home-cards">
