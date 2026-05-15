@@ -6,33 +6,44 @@ export default function Home() {
         <h2>O que é o PC Builder</h2>
         <p className="card-copy">
           Este site ajuda a montar computadores com sugestões de builds baseadas no uso e no orçamento.
-          Aqui você encontra exemplos de configurações, componentes compatíveis e uma forma simples de planejar sua próxima máquina.
+          Aqui você encontra componentes compatíveis e uma forma simples de planejar sua próxima máquina.
         </p>
         <p className="card-copy">
-          Confira abaixo exemplos reais de builds e veja como diferentes peças se combinam para cada perfil de usuário.
+          Explore componentes selecionados para montagem, consulte especificações e descubra o que combina melhor com seu perfil.
         </p>
       </section>
 
       <div className="home-cards">
         <article className="home-card">
-          <h3 className="card-title">Build Gamer</h3>
-          <p className="card-copy">Um equilíbrio entre desempenho em jogos e custo-benefício.</p>
+          <h3 className="card-title">Processador</h3>
+          <p className="card-copy">Intel Core i7-13700K — potência para tarefas exigentes e jogos em alta taxa de quadros.</p>
           <ul>
-            <li>CPU: Intel Core i5-12600K</li>
-            <li>GPU: NVIDIA RTX 4060</li>
-            <li>RAM: 16GB DDR4</li>
-            <li>Armazenamento: 1TB NVMe SSD</li>
+            <li>Threads: 16</li>
+            <li>Base / Turbo: 3.4 / 5.4 GHz</li>
+            <li>Cache: 30MB</li>
+            <li>Soquete: LGA1700</li>
           </ul>
         </article>
 
         <article className="home-card">
-          <h3 className="card-title">Build de Escritório</h3>
-          <p className="card-copy">Configuração ideal para produtividade, escritório e uso diário confortável.</p>
+          <h3 className="card-title">Placa de Vídeo</h3>
+          <p className="card-copy">NVIDIA RTX 4070 — desempenho sólido em 1440p com recursos de ray-tracing e DLSS.</p>
           <ul>
-            <li>CPU: AMD Ryzen 5 5600G</li>
-            <li>GPU: Gráficos integrados Radeon</li>
-            <li>RAM: 16GB DDR4</li>
-            <li>Armazenamento: 500GB SSD</li>
+            <li>Memória: 12GB GDDR6X</li>
+            <li>RT Cores: 3ª geração</li>
+            <li>Consumo: 200W</li>
+            <li>Resfriamento premium</li>
+          </ul>
+        </article>
+
+        <article className="home-card">
+          <h3 className="card-title">Armazenamento</h3>
+          <p className="card-copy">SSD NVMe de 1TB — carregamento rápido de sistema e aplicativos, ideal para produtividade e gaming.</p>
+          <ul>
+            <li>Interface: PCIe 4.0</li>
+            <li>Leitura seq.: 7.000 MB/s</li>
+            <li>Gravação seq.: 5.000 MB/s</li>
+            <li>Confiabilidade: 1.000 TBW</li>
           </ul>
         </article>
       </div>

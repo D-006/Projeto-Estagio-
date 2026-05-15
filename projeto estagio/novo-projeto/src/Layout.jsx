@@ -52,9 +52,6 @@ export default function Layout() {
           <NavLink to="/components" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Componentes
           </NavLink>
-          <NavLink to="/saved-builds" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
-            Minhas Builds
-          </NavLink>
         </nav>
       </header>
 

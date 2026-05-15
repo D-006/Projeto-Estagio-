@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { getCurrentUser } from './auth.js';
+import SavedBuilds from './SavedBuilds.jsx';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -60,12 +61,12 @@ export default function Profile() {
       {error && <p className="error-text">{error}</p>}
       {success && <p className="success-text">{success}</p>}
       <div className="auth-actions">
-        <Link to="/saved-builds" className="nav-link">Minhas Builds</Link>
         <Link to="/components" className="nav-link">Componentes</Link>
         <button className="secondary" onClick={deleteAccount} disabled={loading}>
           {loading ? 'Apagando...' : 'Apagar Conta'}
         </button>
       </div>
+      <SavedBuilds />
     </div>
   );
 }

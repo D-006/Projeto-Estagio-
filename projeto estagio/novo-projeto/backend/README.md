@@ -57,6 +57,19 @@ Backend API for the PC Builder application built with Node.js, Express, and JWT 
    npm run dev
    ```
 
+## Docker
+
+Build and start the backend container locally:
+```bash
+docker build -t pc-builder-backend .
+docker run -p 5000:5000 --env JWT_SECRET=super-secret pc-builder-backend
+```
+
+If you use the repository root `docker-compose.yml`, start both frontend and backend with:
+```bash
+docker compose up --build
+```
+
 ## Environment Variables
 
 Create a `.env` file in the backend directory with the following variables:

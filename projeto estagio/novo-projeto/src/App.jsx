@@ -5,7 +5,6 @@ import Build from './Build.jsx';
 import Components from './Components.jsx';
 import Login from './Login.jsx';
 import Signup from './Signup.jsx';
-import SavedBuilds from './SavedBuilds.jsx';
 import Profile from './Profile.jsx';
 import Layout from './Layout.jsx';
 
@@ -26,7 +25,6 @@ function App() {
           <Route index element={<Home />} />
           <Route path="build" element={<Build />} />
           <Route path="components" element={<Components />} />
-          <Route path="saved-builds" element={<SavedBuilds />} />
           <Route path="profile" element={<Profile />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />

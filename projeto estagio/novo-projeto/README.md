@@ -152,6 +152,19 @@ npm run build
 ### Backend
 Configurar variáveis de ambiente em `.env` e fazer deploy em plataformas como Heroku, Railway, Render, etc.
 
+### Docker
+```bash
+docker compose up --build
+```
+
+- Frontend: http://localhost/
+- Backend: http://localhost:5000/
+
+Se desejar, defina `JWT_SECRET` no ambiente antes de iniciar:
+```bash
+JWT_SECRET=super-secret docker compose up --build
+```
+
 ---
 
 ## 📝 Notas
