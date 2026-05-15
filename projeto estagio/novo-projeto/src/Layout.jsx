@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+﻿import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { getCurrentUser } from './auth.js';
 
 export default function Layout() {
@@ -14,44 +14,55 @@ export default function Layout() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <div className="header-top">
+        <div className="top-bar">
+          <span>Ofertas exclusivas todos os dias</span>
+          <span>Frete grátis acima de R$ 2.000</span>
+        </div>
+
+        <div className="header-main">
           <div className="brand">
             <h1>PC Builder</h1>
-            <p>Construa o seu PC ideal com recomendações automáticas de componentes.</p>
+            <p>Monte seu setup com a experiência de loja online.</p>
           </div>
+
+          <form className="search-bar" onSubmit={(e) => e.preventDefault()}>
+            <input type="text" placeholder="Buscar componentes, builds e ofertas" />
+            <button type="submit">Buscar</button>
+          </form>
+
           <nav className="auth-nav">
-            {user ? (
-              <>
-                <NavLink to="/profile" className={({ isActive }) => `nav-link auth-link${isActive ? ' active' : ''}`}>
-                  Perfil
-                </NavLink>
-                <button className="nav-link auth-link logout-btn" onClick={logout}>
-                  Sair
-                </button>
-              </>
-            ) : (
-              <>
-                <NavLink to="/login" className={({ isActive }) => `nav-link auth-link${isActive ? ' active' : ''}`}>
-                  Login
-                </NavLink>
-                <NavLink to="/signup" className={({ isActive }) => `nav-link auth-link${isActive ? ' active' : ''}`}>
-                  Criar Conta
-                </NavLink>
-              </>
-            )}
+            <NavLink to="/login" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
+              {user ? 'Minha Conta' : 'Login'}
+            </NavLink>
+            <NavLink to="/signup" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
+              Criar Conta
+            </NavLink>
+            <span className="cart-badge">Carrinho</span>
           </nav>
         </div>
-        
-        <nav className="app-nav">
+
+        <nav className="category-nav">
           <NavLink to="/" end className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Início
           </NavLink>
           <NavLink to="/build" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
-            Criar Build
+            Montar Build
           </NavLink>
           <NavLink to="/components" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Componentes
           </NavLink>
+          <a className="nav-link" href="/" onClick={(e) => e.preventDefault()}>
+            PCs Gamer
+          </a>
+          <a className="nav-link" href="/" onClick={(e) => e.preventDefault()}>
+            SSDs
+          </a>
+          <a className="nav-link" href="/" onClick={(e) => e.preventDefault()}>
+            Placas de Vídeo
+          </a>
+          <a className="nav-link" href="/" onClick={(e) => e.preventDefault()}>
+            Acessórios
+          </a>
         </nav>
       </header>
 
@@ -60,7 +71,7 @@ export default function Layout() {
       </main>
 
       <footer className="app-footer">
-        Desenvolvido para ajudar a montar builds de PC com rapidez.
+        Desenvolvido para ajudar a montar builds com a experiência de loja online.
       </footer>
     </div>
   );
