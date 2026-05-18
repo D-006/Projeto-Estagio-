@@ -1,25 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
-function decodeJwt(token) {
-  if (!token) return null;
-  const parts = token.split('.');
-  if (parts.length !== 3) return null;
-  try {
-    const payload = parts[1];
-    const padded = payload.padEnd(payload.length + (4 - (payload.length % 4)) % 4, '=');
-    const decoded = atob(padded.replace(/-/g, '+').replace(/_/g, '/'));
-    return JSON.parse(decoded);
-  } catch {
-    return null;
-  }
-}
-
-function getCurrentUser() {
-  const token = localStorage.getItem('token');
-  return decodeJwt(token);
-}
+import { getCurrentUser } from './auth.js';
 
 export default function Build() {
   const [budget, setBudget] = useState('');
@@ -32,6 +14,11 @@ export default function Build() {
   const currentUser = getCurrentUser();
 
   const generate = async () => {
+    if (!currentUser) {
+      setError('Faça login para criar uma build.');
+      return;
+    }
+
     const budgetNum = parseInt(budget, 10);
     if (isNaN(budgetNum) || budgetNum <= 0) {
       setError('Por favor, insira um orçamento válido.');
@@ -110,9 +97,15 @@ export default function Build() {
         <option value="office">Office</option>
       </select>
 
-      <button className="primary" onClick={generate} disabled={loading}>
+      <button className="primary" onClick={generate} disabled={loading || !currentUser}>
         {loading ? 'Gerando...' : 'Gerar Build'}
       </button>
+
+      {!currentUser && (
+        <p className="card-copy" style={{ marginTop: '12px' }}>
+          Faça <Link to="/login">login</Link> ou <Link to="/signup">crie conta</Link> para gerar e salvar builds.
+        </p>
+      )}
 
       {error && <p className="error-text">{error}</p>}
       {saveMessage && <p className="success-text">{saveMessage}</p>}
