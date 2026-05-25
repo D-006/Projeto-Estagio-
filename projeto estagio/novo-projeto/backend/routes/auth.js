@@ -1,65 +1,32 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { User } = require('../models');
 
 const router = express.Router();
-
-// Mock user database (in production, use a real database)
-let users = [
-  {
-    id: 1,
-    email: 'admin@pcbuilder.com',
-    password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password: 'admin123'
-    name: 'Admin User'
-  }
-];
-
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
-// Signup route
+// Signup
 router.post('/signup', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Validate input
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Nome de usuário, email e senha são necessários.' });
-    }
+    if (!name || !email || !password)
+      return res.status(400).json({ message: 'Nome, email e senha são necessários.' });
 
-    if (!name.trim()) {
-      return res.status(400).json({ message: 'Nome de usuário não pode ficar vazio.' });
-    }
-
-    if (password.length < 6) {
+    if (password.length < 6)
       return res.status(400).json({ message: 'Senha deve ter pelo menos 6 caracteres.' });
-    }
 
-    // Check if user already exists
-    const existingUser = users.find(u => u.email === email);
-    if (existingUser) {
+    const existing = await User.findOne({ where: { email } });
+    if (existing)
       return res.status(400).json({ message: 'Email já registrado.' });
-    }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create new user
-    const newUser = {
-      id: users.length + 1,
-      email,
-      password: hashedPassword,
-      name: name.trim()
-    };
-
-    users.push(newUser);
+    const password_hash = await bcrypt.hash(password, 10);
+    const user = await User.create({ username: name.trim(), email, password_hash });
 
     res.status(201).json({
       message: 'Conta criada com sucesso!',
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        name: newUser.name
-      }
+      user: { id: user.id, email: user.email, name: user.username }
     });
   } catch (error) {
     console.error('Signup error:', error);
@@ -67,37 +34,28 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Login route
+// Login
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user
-    const user = users.find(u => u.email === email);
-    if (!user) {
+    const user = await User.findOne({ where: { email } });
+    if (!user)
       return res.status(401).json({ error: 'Credenciais inválidas.' });
-    }
 
-    // Check password
-    const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword) {
+    const valid = await bcrypt.compare(password, user.password_hash);
+    if (!valid)
       return res.status(401).json({ error: 'Credenciais inválidas.' });
-    }
 
-    // Generate JWT token
     const token = jwt.sign(
-      { userId: user.id, email: user.email, name: user.name },
+      { userId: user.id, email: user.email, name: user.username },
       JWT_SECRET,
       { expiresIn: '24h' }
     );
 
     res.json({
       token,
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name
-      }
+      user: { id: user.id, email: user.email, name: user.username }
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -105,49 +63,40 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Verify token middleware
+// Middleware de autenticação
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
-  if (!token) {
+  if (!token)
     return res.status(401).json({ error: 'Token de acesso necessário.' });
-  }
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) {
+    if (err)
       return res.status(403).json({ error: 'Token inválido.' });
-    }
     req.user = user;
     next();
   });
 };
 
-// Protected route example
-router.get('/profile', authenticateToken, (req, res) => {
-  const user = users.find(u => u.id === req.user.userId);
-  if (!user) {
+// Perfil
+router.get('/profile', authenticateToken, async (req, res) => {
+  const user = await User.findByPk(req.user.userId);
+  if (!user)
     return res.status(404).json({ error: 'Utilizador não encontrado.' });
-  }
 
-  res.json({
-    user: {
-      id: user.id,
-      email: user.email,
-      name: user.name
-    }
-  });
+  res.json({ user: { id: user.id, email: user.email, name: user.username } });
 });
 
-// Delete account route
-router.delete('/delete-account', authenticateToken, (req, res) => {
-  const userIndex = users.findIndex(u => u.id === req.user.userId);
-  if (userIndex === -1) {
+// Apagar conta
+router.delete('/delete-account', authenticateToken, async (req, res) => {
+  const user = await User.findByPk(req.user.userId);
+  if (!user)
     return res.status(404).json({ error: 'Utilizador não encontrado.' });
-  }
 
-  users.splice(userIndex, 1);
-  return res.json({ message: 'Conta apagada com sucesso.' });
+  await user.destroy();
+  res.json({ message: 'Conta apagada com sucesso.' });
 });
 
 module.exports = router;
+module.exports.authenticateToken = authenticateToken;
