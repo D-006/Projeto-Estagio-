@@ -14,34 +14,10 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/components', require('./routes/components'));
 app.use('/api/build', require('./routes/build'));
 app.use('/api/build', require('./routes/generate'));
-app.use('/api/build', require('./routes/generate'));
 
 app.get('/api/health', (req, res) => res.json({ status: 'OK' }));
 
-// Debug: listar rotas registadas (temporário)
-app.get('/debug/routes', (req, res) => {
-  try {
-    const routes = [];
-    app._router.stack.forEach(mw => {
-      if (mw.route) {
-        const methods = Object.keys(mw.route.methods).join(',');
-        routes.push({ path: mw.route.path, methods });
-      } else if (mw.name === 'router' && mw.handle && mw.handle.stack) {
-        mw.handle.stack.forEach(r => {
-          if (r.route) {
-            const methods = Object.keys(r.route.methods).join(',');
-            routes.push({ path: r.route.path, methods });
-          }
-        });
-      }
-    });
-    res.json(routes);
-  } catch (e) {
-    res.status(500).json({ error: 'Falha ao listar rotas.' });
-  }
-});
-
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Erro interno do servidor.' });
 });

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { api } from '../services/api.js';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ export default function Signup() {
     setError('');
 
     try {
-      await axios.post('http://localhost:5000/api/auth/signup', { name, email, password });
+      await api.post('/api/auth/signup', { name, email, password });
       navigate('/login', { state: { success: 'Conta criada com sucesso! Faça login para continuar.' } });
     } catch (err) {
       setError(err.response?.data?.message || 'Falha ao criar conta. Tente novamente.');

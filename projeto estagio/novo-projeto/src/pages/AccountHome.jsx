@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getCurrentUser } from './auth.js';
+import { getCurrentUser, clearAuthStorage, getRefreshToken } from '../lib/auth.js';
+import { api } from '../services/api.js';
 
 export default function AccountHome() {
   const navigate = useNavigate();
@@ -12,8 +13,16 @@ export default function AccountHome() {
     }
   }, [user, navigate]);
 
-  const logout = () => {
-    localStorage.removeItem('token');
+  const logout = async () => {
+    const refreshToken = getRefreshToken();
+    try {
+      if (refreshToken) {
+        await api.post('/api/auth/logout', { refreshToken });
+      }
+    } catch {
+      /* ignorar */
+    }
+    clearAuthStorage();
     navigate('/login');
   };
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { getCurrentUser } from './auth.js';
+import { getCurrentUser } from '../lib/auth.js';
+import { api } from '../services/api.js';
 
 export default function Build() {
   const [budget, setBudget] = useState('');
@@ -34,7 +34,7 @@ export default function Build() {
     setSaveMessage('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/build/generate', { budget: budgetNum, type });
+      const res = await api.post('/api/build/generate', { budget: budgetNum, type });
       setResult(res.data);
     } catch (err) {
       setError('Falha ao gerar build. Verifique o backend e tente novamente.');
@@ -129,7 +129,7 @@ export default function Build() {
 
           <ul className="component-list">
             {componentEntries.map(([category, component]) => (
-              <li key={component.id} className="component-item">
+              <li key={category} className="component-item">
                 <div className="component-item-title">
                   <span className="component-type">{category.toUpperCase()}</span>
                   <strong>{component.name}</strong>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { persistAuthTokens } from '../lib/auth.js';
+import { api } from '../services/api.js';
 
 export default function Login() {
   const location = useLocation();
@@ -16,8 +17,11 @@ export default function Login() {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-      localStorage.setItem('token', res.data.token);
+      const res = await api.post('/api/auth/login', { email, password });
+      persistAuthTokens({
+        accessToken: res.data.accessToken,
+        refreshToken: res.data.refreshToken,
+      });
       navigate('/account');
     } catch (err) {
       setError('Falha ao fazer login. Verifique e tente novamente.');

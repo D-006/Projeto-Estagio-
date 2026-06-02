@@ -1,22 +1,14 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './Home.jsx';
-import Build from './Build.jsx';
-import Components from './Components.jsx';
-import Login from './Login.jsx';
-import Signup from './Signup.jsx';
-import Profile from './Profile.jsx';
-import AccountHome from './AccountHome.jsx';
-import Layout from './Layout.jsx';
-
-function NotFound() {
-  return (
-    <div className="page-card">
-      <h1>Página não encontrada</h1>
-      <p>Verifique a URL ou use o menu para voltar à página inicial.</p>
-    </div>
-  );
-}
+import Layout from './components/Layout.jsx';
+import Home from './pages/Home.jsx';
+import Build from './pages/Build.jsx';
+import Components from './pages/Components.jsx';
+import Login from './pages/Login.jsx';
+import Signup from './pages/Signup.jsx';
+import Profile from './pages/Profile.jsx';
+import AccountHome from './pages/AccountHome.jsx';
+import NotFound from './pages/NotFound.jsx';
 
 function App() {
   return (

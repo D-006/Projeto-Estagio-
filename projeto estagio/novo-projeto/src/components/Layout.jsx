@@ -1,5 +1,6 @@
-﻿﻿import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { getCurrentUser } from './auth.js';
+﻿import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { getCurrentUser, clearAuthStorage, getRefreshToken } from '../lib/auth.js';
+import { api } from '../services/api.js';
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -7,8 +8,16 @@ export default function Layout() {
   const user = getCurrentUser();
   const hideCategoryNav = location.pathname === '/account';
 
-  const logout = () => {
-    localStorage.removeItem('token');
+  const logout = async () => {
+    const refreshToken = getRefreshToken();
+    try {
+      if (refreshToken) {
+        await api.post('/api/auth/logout', { refreshToken });
+      }
+    } catch {
+      /* sessão já inválida */
+    }
+    clearAuthStorage();
     navigate('/');
   };
 

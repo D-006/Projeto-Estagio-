@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { getCurrentUser } from './auth.js';
-import SavedBuilds from './SavedBuilds.jsx';
+import { getCurrentUser, clearAuthStorage } from '../lib/auth.js';
+import { api } from '../services/api.js';
+import SavedBuilds from '../components/SavedBuilds.jsx';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -21,8 +21,6 @@ export default function Profile() {
     );
   }
 
-  const token = localStorage.getItem('token');
-
   const deleteAccount = async () => {
     if (!window.confirm('Tem certeza que deseja apagar sua conta? Esta ação não pode ser desfeita.')) {
       return;
@@ -33,11 +31,8 @@ export default function Profile() {
     setSuccess('');
 
     try {
-      await axios.delete('http://localhost:5000/api/auth/delete-account', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      localStorage.removeItem('token');
+      await api.delete('/api/auth/delete-account');
+      clearAuthStorage();
       localStorage.removeItem(`savedBuilds_${user.email}`);
       setSuccess('Conta apagada com sucesso.');
       setTimeout(() => navigate('/signup'), 1200);

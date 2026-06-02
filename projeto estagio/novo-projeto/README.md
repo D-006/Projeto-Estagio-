@@ -6,7 +6,7 @@ Uma aplicação web desenvolvida em React que permite aos utilizadores criar con
 
 ## 🚀 Funcionalidades
 
-- 🔐 **Sistema de autenticação** — Login e criação de conta
+- 🔐 **Autenticação** — Access JWT curto + refresh token com rotação e sessões em base de dados
 - 💰 **Orçamento flexível** — Define o teu orçamento
 - 🎮 **Tipos de build** — Gaming ou Escritório
 - ⚙️ **Geração automática** — Recomendações de componentes
@@ -38,32 +38,44 @@ Uma aplicação web desenvolvida em React que permite aos utilizadores criar con
 
 ```
 novo-projeto/
-├── src/                    # Frontend React
+├── src/
+│   ├── main.jsx
 │   ├── App.jsx
-│   ├── Home.jsx
-│   ├── Build.jsx
-│   ├── Components.jsx
-│   ├── Login.jsx
-│   ├── Signup.jsx
-│   ├── Layout.jsx
-│   ├── styles.css
-│   └── main.jsx
-├── backend/                # Backend Node.js/Express
+│   ├── pages/              # Ecrãs (rotas)
+│   │   ├── Home.jsx
+│   │   ├── Build.jsx
+│   │   ├── Components.jsx
+│   │   ├── Login.jsx
+│   │   ├── Signup.jsx
+│   │   ├── Profile.jsx
+│   │   ├── AccountHome.jsx
+│   │   └── NotFound.jsx
+│   ├── components/         # UI partilhada
+│   │   ├── Layout.jsx
+│   │   └── SavedBuilds.jsx
+│   ├── lib/                # Utilitários (tokens / JWT no cliente)
+│   │   └── auth.js
+│   ├── services/           # Cliente HTTP (Axios + renovação automática)
+│   │   └── api.js
+│   ├── styles/
+│   │   └── globals.css
+│   └── assets/
+├── backend/
 │   ├── routes/
-│   │   ├── auth.js
-│   │   ├── components.js
-│   │   ├── build.js
-│   │   └── components-data.js
+│   ├── models/
+│   ├── migrations/         # SQL para BDs já existentes
 │   ├── server.js
-│   ├── package.json
-│   ├── .env
-│   └── .env.example
+│   ├── db.js
+│   ├── schema.sql
+│   └── package.json
 ├── package.json
 ├── vite.config.js
-├── start-dev.sh           # Script para Linux/Mac
-├── start-dev.ps1          # Script para Windows
+├── start-dev.sh
+├── start-dev.ps1
 └── README.md
 ```
+
+**BD existente:** executar uma vez o script `backend/migrations/001_add_refresh_sessions.sql` para criar a tabela de sessões de refresh (não altera credenciais de ligação).
 
 ---
 
@@ -96,6 +108,8 @@ npm install
 npm run dev
 # Aplicação em http://localhost:5173
 ```
+
+Em desenvolvimento, o Vite encaminha os pedidos `/api/*` para o backend (`http://localhost:5000` por omissão). Podes alterar o destino com a variável de ambiente `VITE_DEV_PROXY_TARGET` ao arrancar o Vite.
 
 ---
 
@@ -152,13 +166,41 @@ npm run build
 ### Backend
 Configurar variáveis de ambiente em `.env` e fazer deploy em plataformas como Heroku, Railway, Render, etc.
 
-### Docker
+### Docker (produção — Nginx + API empacotadas)
+
 ```bash
 docker compose up --build
 ```
 
 - Frontend: http://localhost/
 - Backend: http://localhost:5000/
+
+### Docker (desenvolvimento — código sincronizado + hot reload)
+
+Volumes montam o teu código; o backend usa **nodemon** e o frontend **Vite** com proxy para a API.
+
+```bash
+npm run docker:dev
+```
+
+- Frontend: http://localhost:5173
+- Backend: http://localhost:5000
+
+Com **`docker compose watch`**, o Docker **reconstrói** os serviços quando alteras `package.json` / `package-lock.json` (dependências novas):
+
+```bash
+npm run docker:dev:watch
+```
+
+### Atualização automática da imagem MySQL (Watchtower)
+
+O serviço **Watchtower** (perfil `auto-update`) verifica imagens com etiqueta e faz *pull* de versões novas (por defeito a cada 24h). Só a base de dados está etiquetada para atualização — as imagens que constróis localmente (`build:`) não são substituídas pelo Hub.
+
+```bash
+npm run docker:watchtower
+```
+
+Para parar o Watchtower: `docker compose --profile auto-update down` (ou `docker stop` no contentor).
 
 Se desejar, defina `JWT_SECRET` no ambiente antes de iniciar:
 ```bash

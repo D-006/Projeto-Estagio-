@@ -4,6 +4,8 @@ services:
   db:
     image: mysql:8.0
     container_name: pc-builder-db
+    labels:
+      com.centurylinklabs.watchtower.enable: 'true'
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
       MYSQL_DATABASE: ${DB_NAME:-pc_builder}
@@ -32,6 +34,9 @@ services:
       - PORT=5000
       - NODE_ENV=production
       - JWT_SECRET=${JWT_SECRET:-super-secret-jwt-key}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-super-secret-jwt-key-refresh}
+      - JWT_ACCESS_EXPIRES=${JWT_ACCESS_EXPIRES:-15m}
+      - JWT_REFRESH_EXPIRES=${JWT_REFRESH_EXPIRES:-7d}
       - DB_HOST=db
       - DB_PORT=3306
       - DB_USER=${DB_USER:-appuser}
@@ -50,6 +55,19 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    profiles:
+      - auto-update
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      WATCHTOWER_CLEANUP: 'true'
+      WATCHTOWER_LABEL_ENABLE: 'true'
+      WATCHTOWER_POLL_INTERVAL: '86400'
+      WATCHTOWER_INCLUDE_STOPPED: 'false'
 
 volumes:
   db_data:

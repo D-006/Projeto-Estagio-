@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { api } from '../services/api.js';
 
 const typeLabels = {
   all: 'Todos',
@@ -46,7 +46,7 @@ export default function Components() {
       setLoading(true);
       setError('');
       try {
-        const res = await axios.get('http://localhost:5000/api/components');
+        const res = await api.get('/api/components');
         if (isMounted) setData(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         if (isMounted) {

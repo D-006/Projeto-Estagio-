@@ -1,53 +1,43 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-
-function decodeJwt(token) {
-  if (!token) return null;
-  const parts = token.split('.');
-  if (parts.length !== 3) return null;
-  try {
-    const payload = parts[1];
-    const padded = payload.padEnd(payload.length + (4 - (payload.length % 4)) % 4, '=');
-    const decoded = atob(padded.replace(/-/g, '+').replace(/_/g, '/'));
-    return JSON.parse(decoded);
-  } catch {
-    return null;
-  }
-}
-
-function getCurrentUser() {
-  const token = localStorage.getItem('token');
-  return decodeJwt(token);
-}
+import { getCurrentUser } from '../lib/auth.js';
 
 export default function SavedBuilds() {
-  const currentUser = getCurrentUser();
-  const [user] = useState(currentUser);
-  const [builds, setBuilds] = useState(() => {
-    if (!currentUser) return [];
-    return JSON.parse(localStorage.getItem(`savedBuilds_${currentUser.email}`) || '[]');
-  });
-  const [loading] = useState(false);
+  const user = getCurrentUser();
+  const storageKey = user?.email ? `savedBuilds_${user.email}` : null;
+  const [revision, setRevision] = useState(0);
   const [selectedBuild, setSelectedBuild] = useState(null);
 
+  const builds = useMemo(() => {
+    void revision;
+    if (!storageKey) return [];
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || '[]');
+    } catch {
+      return [];
+    }
+  }, [storageKey, revision]);
+
+  const persistBuilds = useCallback(
+    nextList => {
+      if (!storageKey) return;
+      localStorage.setItem(storageKey, JSON.stringify(nextList));
+      setRevision(r => r + 1);
+    },
+    [storageKey]
+  );
+
   const removeBuild = id => {
-    if (!user) return;
-    const key = `savedBuilds_${user.email}`;
-    const updated = builds.filter(build => build.id !== id);
-    localStorage.setItem(key, JSON.stringify(updated));
-    setBuilds(updated);
+    persistBuilds(builds.filter(build => build.id !== id));
   };
 
   const clearBuilds = () => {
-    if (!user) return;
-    const key = `savedBuilds_${user.email}`;
-    localStorage.setItem(key, '[]');
-    setBuilds([]);
+    persistBuilds([]);
   };
 
-  const renderComponentList = (components) => {
-    return Object.entries(components).map(([category, component]) => (
-      <li key={component.id} className="component-item">
+  const renderComponentList = components =>
+    Object.entries(components || {}).map(([category, component]) => (
+      <li key={category} className="component-item">
         <div className="component-item-title">
           <span className="component-type">{category.toUpperCase()}</span>
           <strong>{component.name}</strong>
@@ -56,24 +46,6 @@ export default function SavedBuilds() {
         <p className="component-subtitle">{component.specs}</p>
       </li>
     ));
-  };
-
-  const showDetails = (build) => {
-    setSelectedBuild(build);
-  };
-
-  const closeDetails = () => {
-    setSelectedBuild(null);
-  };
-
-  if (loading) {
-    return (
-      <div className="page-card">
-        <h2>Minhas Builds</h2>
-        <p className="card-copy">Carregando...</p>
-      </div>
-    );
-  }
 
   if (!user) {
     return (
@@ -126,7 +98,7 @@ export default function SavedBuilds() {
               </ul>
 
               <div className="build-actions">
-                <button className="secondary" onClick={() => showDetails(build)}>Ver Detalhes</button>
+                <button className="secondary" onClick={() => setSelectedBuild(build)}>Ver Detalhes</button>
                 <button className="secondary" onClick={() => removeBuild(build.id)}>Remover</button>
               </div>
             </article>
@@ -135,14 +107,14 @@ export default function SavedBuilds() {
       )}
 
       {selectedBuild && (
-        <div className="modal-overlay" onClick={closeDetails}>
+        <div className="modal-overlay" onClick={() => setSelectedBuild(null)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <div>
                 <h2>{selectedBuild.type === 'gaming' ? 'Gaming Build' : 'Office Build'} - Detalhes</h2>
                 <p className="card-copy">Tudo o que você precisa saber sobre essa configuração salva.</p>
               </div>
-              <button className="close-btn" onClick={closeDetails}>&times;</button>
+              <button className="close-btn" onClick={() => setSelectedBuild(null)}>&times;</button>
             </div>
 
             <div className="modal-row">
