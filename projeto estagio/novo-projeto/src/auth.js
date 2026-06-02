@@ -15,5 +15,11 @@ export function decodeJwt(token) {
 
 export function getCurrentUser() {
   const token = localStorage.getItem('token');
-  return decodeJwt(token);
+  const user = decodeJwt(token);
+
+  // Se o token expirou ou está inválido, não considerar como logado.
+  if (!user || !user.exp) return null;
+
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  return user.exp && user.exp < nowSeconds ? null : user;
 }

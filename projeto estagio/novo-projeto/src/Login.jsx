@@ -18,7 +18,7 @@ export default function Login() {
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
       localStorage.setItem('token', res.data.token);
-      navigate('/');
+      navigate('/account');
     } catch (err) {
       setError('Falha ao fazer login. Verifique e tente novamente.');
       console.error(err);

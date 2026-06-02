@@ -6,6 +6,7 @@ import Components from './Components.jsx';
 import Login from './Login.jsx';
 import Signup from './Signup.jsx';
 import Profile from './Profile.jsx';
+import AccountHome from './AccountHome.jsx';
 import Layout from './Layout.jsx';
 
 function NotFound() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="build" element={<Build />} />
           <Route path="components" element={<Components />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="account" element={<AccountHome />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />

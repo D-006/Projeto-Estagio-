@@ -1,10 +1,11 @@
-﻿import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+﻿﻿import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { getCurrentUser } from './auth.js';
 
 export default function Layout() {
   const navigate = useNavigate();
-  useLocation();
+  const location = useLocation();
   const user = getCurrentUser();
+  const hideCategoryNav = location.pathname === '/account';
 
   const logout = () => {
     localStorage.removeItem('token');
@@ -13,6 +14,7 @@ export default function Layout() {
 
   return (
     <div className="app-shell">
+
       <header className="app-header">
         <div className="header-main">
           <div className="brand">
@@ -21,15 +23,30 @@ export default function Layout() {
           </div>
 
           <nav className="auth-nav">
-            <NavLink to="/login" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
-              {user ? 'Minha Conta' : 'Login'}
-            </NavLink>
-            <NavLink to="/signup" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
-              Criar Conta
-            </NavLink>
+            {!user ? (
+              <>
+                <NavLink
+                  to="/login"
+                  className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
+                >
+                  Login
+                </NavLink>
+                <NavLink
+                  to="/signup"
+                  className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
+                >
+                  Criar Conta
+                </NavLink>
+              </>
+            ) : (
+              <button type="button" className="secondary" onClick={logout}>
+                Sair
+              </button>
+            )}
           </nav>
         </div>
 
+        {!hideCategoryNav && (
         <nav className="category-nav">
           <NavLink to="/" end className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             Início
@@ -41,6 +58,7 @@ export default function Layout() {
             Componentes
           </NavLink>
         </nav>
+      )}
       </header>
 
       <main className="app-main">
