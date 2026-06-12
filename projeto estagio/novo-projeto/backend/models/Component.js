@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
     description: { type: DataTypes.TEXT },
     specifications: { type: DataTypes.JSON },
+    image_url: { type: DataTypes.STRING(500), allowNull: true },
+    image_alt: { type: DataTypes.STRING(255), allowNull: true },
     in_stock: { type: DataTypes.BOOLEAN, defaultValue: true },
   }, {
     tableName: 'components',

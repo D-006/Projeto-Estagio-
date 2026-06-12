@@ -1,7 +1,8 @@
 # TODO
+- [x] Entender onde a “caixa das informações” é estilizada
+- [x] Atualizar o CSS para deixar o fundo dos chips/labels em cinzento escuro
+- [x] Verificar em modo light e dark na página Components (ajuste em CSS aplicado)
 
-- [ ] Atualizar `src/Layout.jsx` para, quando o utilizador estiver logado:
-  - [ ] Mostrar botão/link **Sair** (logout) no header
-  - [ ] Ocultar **Criar Conta** quando logado
-- [ ] (Se necessário) Ajustar textos/links em outros componentes para remover “crie conta” quando não fizer sentido
-- [ ] Validar no browser: login -> vai para `/`; botão Sair -> limpa token e vai para `/`
+
+
+

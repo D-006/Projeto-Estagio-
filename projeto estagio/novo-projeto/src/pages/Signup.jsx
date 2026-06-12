@@ -48,7 +48,7 @@ export default function Signup() {
 
       <input
         className="form-control"
-        placeholder="Nome de usuário"
+        placeholder="Nome de utilizador"
         value={name}
         onChange={e => setName(e.target.value)}
       />

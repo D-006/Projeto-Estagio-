@@ -1,11 +1,13 @@
 ﻿import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { getCurrentUser, clearAuthStorage, getRefreshToken } from '../lib/auth.js';
 import { api } from '../services/api.js';
+import { useTheme } from '../lib/useTheme.js';
 
 export default function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
   const user = getCurrentUser();
+  const { theme, toggleTheme } = useTheme();
   const hideCategoryNav = location.pathname === '/account';
 
   const logout = async () => {
@@ -32,6 +34,15 @@ export default function Layout() {
           </div>
 
           <nav className="auth-nav">
+            <button
+              type="button"
+              className="theme-toggle"
+              onClick={toggleTheme}
+              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            >
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
             {!user ? (
               <>
                 <NavLink
@@ -48,9 +59,17 @@ export default function Layout() {
                 </NavLink>
               </>
             ) : (
-              <button type="button" className="secondary" onClick={logout}>
-                Sair
-              </button>
+              <>
+                <NavLink
+                  to="/account"
+                  className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
+                >
+                  Minha Conta
+                </NavLink>
+                <button type="button" className="secondary" onClick={logout}>
+                  Sair
+                </button>
+              </>
             )}
           </nav>
         </div>

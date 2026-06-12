@@ -14,8 +14,8 @@ services:
       NODE_ENV: development
       JWT_SECRET: ${JWT_SECRET:-super-secret-jwt-key}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-super-secret-jwt-key-refresh}
-      JWT_ACCESS_EXPIRES: ${JWT_ACCESS_EXPIRES:-15m}
-      JWT_REFRESH_EXPIRES: ${JWT_REFRESH_EXPIRES:-7d}
+      JWT_ACCESS_EXPIRES: ${JWT_ACCESS_EXPIRES:-3h}
+      JWT_REFRESH_EXPIRES: ${JWT_REFRESH_EXPIRES:-3h}
       DB_HOST: db
       DB_PORT: 3306
       DB_USER: ${DB_USER:-appuser}
@@ -36,6 +36,7 @@ services:
       dockerfile: Dockerfile.vite.dev
     ports:
       - '5173:5173'
+    command: npm run dev -- --host 0.0.0.0 --port 5173
     environment:
       VITE_DEV_PROXY_TARGET: http://backend:5000
     volumes:
@@ -45,12 +46,6 @@ services:
       - ./vite.config.js:/app/vite.config.js
     depends_on:
       - backend
-    develop:
-      watch:
-        - path: ./package.json
-          action: rebuild
-        - path: ./package-lock.json
-          action: rebuild
 
 volumes:
   backend_node_modules:

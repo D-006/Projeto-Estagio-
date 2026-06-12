@@ -77,7 +77,7 @@ export default function Components() {
     const key = comp._id ?? comp.id ?? comp.name;
     const matchesSearch = comp.name.toLowerCase().includes(search)
       || comp.description?.toLowerCase().includes(search)
-      || comp.specs?.toLowerCase().includes(search);
+      || comp.specifications?.toLowerCase().includes(search);
     const matchesFavorites = filterType !== 'favorite' || favorites.includes(key);
     const matchesType = filterType === 'all' || filterType === 'favorite' || comp.type === filterType;
     const price = Number(comp.price ?? 0);
@@ -152,11 +152,26 @@ export default function Components() {
                   const isFavorite = favorites.includes(key);
                   return (
                     <article key={key} className="component-card" onClick={() => setSelected(c)}>
+                      <div className="component-image-wrapper">
+                        {c.image_url ? (
+                          <img
+                            src={c.image_url}
+                            alt={c.image_alt || c.name}
+                            loading="lazy"
+                            onError={(e) => {
+                              // evita ficar preso se a URL falhar
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                        ) : (
+                          <div className="component-image-placeholder">Sem imagem</div>
+                        )}
+                      </div>
                       <div className="component-card-header">
                         <div>
                           <h3>{c.name}</h3>
                           <p className="component-subtitle">
-                            {c.manufacturer ? `${c.manufacturer} • ` : ''}{c.specs}
+                            {c.manufacturer ? `${c.manufacturer} • ` : ''}{c.specifications || c.description}
                           </p>
                         </div>
                         <button
@@ -194,8 +209,8 @@ export default function Components() {
               <h3>{selected.name}</h3>
               <button className="close-btn" onClick={() => setSelected(null)}>×</button>
             </div>
-            {selected.description || selected.specs ? (
-              <p className="card-copy">{selected.description || selected.specs}</p>
+            {selected.description || selected.specifications ? (
+              <p className="card-copy">{selected.description || selected.specifications}</p>
             ) : null}
             <div className="modal-row">
               <div>
@@ -219,10 +234,15 @@ export default function Components() {
             {selected.rating && (
               <p className="component-rating">Avaliação: {'★'.repeat(Math.round(selected.rating))}{'☆'.repeat(5 - Math.round(selected.rating))} ({selected.rating.toFixed(1)})</p>
             )}
-            {selected.specs && (
+            {selected.image_url && (
+              <div className="modal-image-wrapper">
+                <img src={selected.image_url} alt={selected.image_alt || selected.name} />
+              </div>
+            )}
+            {selected.specifications && (
               <div className="modal-specs">
                 <strong>Especificações:</strong>
-                <p>{selected.specs}</p>
+                <p>{selected.specifications}</p>
               </div>
             )}
             {selected.linkCompra && (

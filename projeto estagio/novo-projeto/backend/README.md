@@ -20,8 +20,8 @@ Backend API for the PC Builder application built with Node.js, Express, and JWT 
 
 ### Components
 - `GET /api/components` - Get all components
-- `GET /api/components/:type` - Get components by type (cpu, gpu, ram, storage, motherboard, psu, case)
-- `GET /api/components/component/:id` - Get component by ID
+- `GET /api/components?category=cpu` - Filter components by category or type
+- `GET /api/components/:id` - Get component by ID
 
 ### Build Generation
 - `POST /api/build/generate` - Generate PC build

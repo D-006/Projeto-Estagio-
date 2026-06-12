@@ -27,7 +27,9 @@ app.use('*', (req, res) => res.status(404).json({ error: 'Rota não encontrada.'
 const startServer = async () => {
   try {
     await sequelize.authenticate();
+    await sequelize.sync({ alter: true });
     console.log('✓ Database connection established successfully');
+    console.log('✓ Database schema synced successfully');
     app.listen(PORT, () => console.log(`✓ Server is running on port ${PORT}`));
   } catch (error) {
     console.error('✗ Failed to connect to database:', error);
@@ -38,8 +40,6 @@ const startServer = async () => {
       DB_NAME: process.env.DB_NAME,
     });
     console.warn('Continuing without a database connection — some features may be disabled.');
-    // Start the server anyway so routes that don't require the DB (like /api/build/generate)
-    // remain available for the frontend to call, improving developer experience.
     app.listen(PORT, () => console.log(`✓ Server is running on port ${PORT} (DB disconnected)`));
   }
 };

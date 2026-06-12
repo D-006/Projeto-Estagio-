@@ -7,8 +7,8 @@ const { User, RefreshToken } = require('../models');
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || `${JWT_SECRET}_refresh`;
-const ACCESS_EXPIRES = process.env.JWT_ACCESS_EXPIRES || '15m';
-const REFRESH_EXPIRES = process.env.JWT_REFRESH_EXPIRES || '7d';
+const ACCESS_EXPIRES = process.env.JWT_ACCESS_EXPIRES || '3h';
+const REFRESH_EXPIRES = process.env.JWT_REFRESH_EXPIRES || '3h';
 
 function signAccessToken(user) {
   return jwt.sign(

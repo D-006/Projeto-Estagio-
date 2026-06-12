@@ -22,7 +22,7 @@ export default function Login() {
         accessToken: res.data.accessToken,
         refreshToken: res.data.refreshToken,
       });
-      navigate('/account');
+      navigate('/', { state: { success: 'Login efetuado com sucesso!' } });
     } catch (err) {
       setError('Falha ao fazer login. Verifique e tente novamente.');
       console.error(err);
@@ -35,6 +35,9 @@ export default function Login() {
     <div className="page-card">
       <h2>Login</h2>
       <p className="card-copy">Digite suas credenciais para acessar sua conta e salvar suas builds.</p>
+      <p className="card-copy" style={{ marginTop: '12px', fontStyle: 'italic' }}>
+        Sessão válida por 3 horas. Após esse período, será necessário fazer login novamente.
+      </p>
 
       <input
         className="form-control"
