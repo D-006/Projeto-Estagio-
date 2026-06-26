@@ -896,13 +896,20 @@ button:disabled {
 
 .modal-content {
   width: min(560px, 100%);
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #111827; /* cinzento escuro */
+  color: var(--text);
+  border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: 24px;
   padding: 30px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
   animation: slideUp 0.3s ease;
 }
+
+[data-theme="light"] .modal-content {
+  /* mantém o modal cinzento escuro mesmo no tema claro (ajuste se quiser) */
+  background: #111827;
+}
+
 
 @keyframes slideUp {
   from {
@@ -925,7 +932,7 @@ button:disabled {
 
 .close-btn {
   border: none;
-  background: #f3f4f6;
+  background: rgba(148, 163, 184, 0.14);
   color: var(--text);
   width: 40px;
   height: 40px;
@@ -936,9 +943,14 @@ button:disabled {
 }
 
 .close-btn:hover {
-  background: #e5e7eb;
+  background: rgba(148, 163, 184, 0.24);
   transform: rotate(90deg);
 }
+
+[data-theme="dark"] .close-btn {
+  background: rgba(148, 163, 184, 0.14);
+}
+
 
 .modal-row {
   display: flex;

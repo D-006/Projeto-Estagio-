@@ -107,7 +107,14 @@ function extractFirstImageUrl(item) {
     item.media_url ||
     item.urlImage ||
     item.product_image ||
-    item.productImage;
+    item.productImage ||
+    // outras variações comuns de providers
+    item.thumbnailUrl ||
+    item.coverImageUrl ||
+    item.cover_image_url ||
+    item.mediaUrl ||
+    item.image_link ||
+    item.imageLink;
 
   if (typeof direct === 'string' && direct.trim()) return direct.trim();
 
@@ -179,7 +186,15 @@ async function fetchRemoteComponents() {
         timeout: 10000,
       });
       const data = res.data;
-      return Array.isArray(data) ? data : data.components || [];
+
+      // Aceita: array direto ou { components: [...] }.
+      if (Array.isArray(data)) return data;
+      if (data && Array.isArray(data.components)) return data.components;
+
+      // Qualquer outro formato será ignorado.
+      return [];
+    
+    
     })
   );
 
@@ -192,9 +207,20 @@ async function fetchRemoteComponents() {
 
 async function getMarketplaceComponents() {
   const remote = await fetchRemoteComponents();
-  if (remote && remote.length) {
-    return remote;
+
+  if (marketplaceSources.length) {
+    // Se tem sources configuradas e falhar/vier vazio, não cair silenciosamente no fallback.
+    if (remote && remote.length) return remote;
+
+    console.warn('[componentSources] sources configuradas, mas não retornaram itens.');
+    console.warn('[componentSources] COMPONENT_MARKETPLACE_SOURCES=', process.env.COMPONENT_MARKETPLACE_SOURCES);
+    if (remote) console.warn('[componentSources] remote length=', remote.length);
+
+    return [];
   }
+
+  // Sem sources configuradas: usa fallback local.
+  console.warn('[componentSources] COMPONENT_MARKETPLACE_SOURCES não configurado. Usando fallback local.');
   return FALLBACK_MARKETPLACE_COMPONENTS;
 }
 

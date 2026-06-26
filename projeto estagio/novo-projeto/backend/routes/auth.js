@@ -45,12 +45,20 @@ router.post('/signup', async (req, res) => {
     if (password.length < 6)
       return res.status(400).json({ message: 'Senha deve ter pelo menos 6 caracteres.' });
 
-    const existing = await User.findOne({ where: { email } });
-    if (existing)
+    const username = name.trim();
+
+    const existingByEmail = await User.findOne({ where: { email } });
+    if (existingByEmail) {
       return res.status(400).json({ message: 'Email já registrado.' });
+    }
+
+    const existingByUsername = await User.findOne({ where: { username } });
+    if (existingByUsername) {
+      return res.status(400).json({ message: 'Nome de utilizador já está em uso.' });
+    }
 
     const password_hash = await bcrypt.hash(password, 10);
-    const user = await User.create({ username: name.trim(), email, password_hash });
+    const user = await User.create({ username, email, password_hash });
 
     res.status(201).json({
       message: 'Conta criada com sucesso!',

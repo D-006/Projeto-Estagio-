@@ -1,4 +1,4 @@
-﻿import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+﻿﻿import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { getCurrentUser, clearAuthStorage, getRefreshToken } from '../lib/auth.js';
 import { api } from '../services/api.js';
 import { useTheme } from '../lib/useTheme.js';
@@ -64,11 +64,8 @@ export default function Layout() {
                   to="/account"
                   className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
                 >
-                  Minha Conta
+                  Conta
                 </NavLink>
-                <button type="button" className="secondary" onClick={logout}>
-                  Sair
-                </button>
               </>
             )}
           </nav>

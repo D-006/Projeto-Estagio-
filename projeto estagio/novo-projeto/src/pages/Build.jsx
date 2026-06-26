@@ -128,7 +128,7 @@ export default function Build() {
           </div>
 
           <ul className="component-list">
-            {componentEntries.map(([category, component]) => (
+            {componentEntries.map(([category, component], index) => (
               <li key={category} className="component-item">
                 <div className="component-item-title">
                   <span className="component-type">{category.toUpperCase()}</span>
@@ -136,6 +136,18 @@ export default function Build() {
                   <span>{component.price}€</span>
                 </div>
                 <p className="component-subtitle">{component.specs}</p>
+                {component.linkCompra ? (
+                  <div className="component-buy-links">
+                    <a
+                      href={component.linkCompra}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Comprar (#{index + 1})
+                    </a>
+                  </div>
+                ) : null}
               </li>
             ))}
           </ul>

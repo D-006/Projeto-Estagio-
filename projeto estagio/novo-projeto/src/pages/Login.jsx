@@ -36,7 +36,7 @@ export default function Login() {
       <h2>Login</h2>
       <p className="card-copy">Digite suas credenciais para acessar sua conta e salvar suas builds.</p>
       <p className="card-copy" style={{ marginTop: '12px', fontStyle: 'italic' }}>
-        Sessão válida por 3 horas. Após esse período, será necessário fazer login novamente.
+    
       </p>
 
       <input

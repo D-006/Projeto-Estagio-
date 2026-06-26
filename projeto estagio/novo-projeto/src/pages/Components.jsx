@@ -152,6 +152,7 @@ export default function Components() {
                   const isFavorite = favorites.includes(key);
                   return (
                     <article key={key} className="component-card" onClick={() => setSelected(c)}>
+
                       <div className="component-image-wrapper">
                         {c.image_url ? (
                           <img

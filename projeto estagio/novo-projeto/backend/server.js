@@ -14,6 +14,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/components', require('./routes/components'));
 app.use('/api/build', require('./routes/build'));
 app.use('/api/build', require('./routes/generate'));
+app.use('/api/external-components', require('./routes/externalComponents'));
 
 app.get('/api/health', (req, res) => res.json({ status: 'OK' }));
 
